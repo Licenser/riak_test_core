@@ -31,7 +31,8 @@ get_deps() ->
     lists:flatten(io_lib:format("~s/dev/dev1/lib", [relpath(current)])).
 
 riakcmd(Path, N, Cmd) ->
-    io_lib:format("~s/dev/dev~b/bin/riak ~s", [Path, N, Cmd]).
+    Executable = rt:config(rc_executable, "riak"),
+    io_lib:format("~s/dev/dev~b/bin/~s ~s", [Path, N, Executable, Cmd]).
 
 gitcmd(Path, Cmd) ->
     io_lib:format("git --git-dir=\"~s/.git\" --work-tree=\"~s/\" ~s",
@@ -45,7 +46,8 @@ riak_admin_cmd(Path, N, Args) ->
                           erlang:error(badarg)
                   end, Args),
     ArgStr = string:join(Quoted, " "),
-    io_lib:format("~s/dev/dev~b/bin/riak-admin ~s", [Path, N, ArgStr]).
+    Executable = rt:config(rc_admin, "riak-admin"),
+    io_lib:format("~s/dev/dev~b/bin/~s ~s", [Path, N, Executable, ArgStr]).
 
 run_git(Path, Cmd) ->
     lager:debug("Running: ~s", [gitcmd(Path, Cmd)]),
@@ -66,6 +68,7 @@ run_riak(N, Path, Cmd) ->
         _ ->
             R
     end.
+
 
 setup_harness(_Test, _Args) ->
     Path = relpath(root),
@@ -272,7 +275,7 @@ stop_all(DevPath) ->
             Devs = filelib:wildcard(DevPath ++ "/dev*"),
             %% Works, but I'd like it to brag a little more about it.
             Stop = fun(C) ->
-                Cmd = C ++ "/bin/riak stop",
+                Cmd = C ++ "/bin/" ++ rt:config(rc_executable, "riak") ++ " stop",
                 [Output | _Tail] = string:tokens(os:cmd(Cmd), "\n"),
                 Status = case Output of
                     "ok" -> "ok";
