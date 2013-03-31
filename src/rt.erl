@@ -1041,6 +1041,8 @@ set_backend(eleveldb) ->
     set_backend(riak_kv_eleveldb_backend);
 set_backend(memory) ->
     set_backend(riak_kv_memory_backend);
+set_backend(none) ->
+    [none];
 set_backend(Backend) when Backend == riak_kv_bitcask_backend; Backend == riak_kv_eleveldb_backend; Backend == riak_kv_memory_backend ->
     lager:info("rt:set_backend(~p)", [Backend]),
     ?HARNESS:set_backend(Backend);
