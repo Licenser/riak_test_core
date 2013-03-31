@@ -74,7 +74,12 @@
 {rtdev, [
     %% The name of the project/product, used when fetching the test
     %% suite and reporting.
-    {rt_project, "riak"},
+    {rt_project, "riak_core_app"},
+
+    {rc_executable, "riak_core_app"},
+    {rc_admin, "riak_core_app"},
+    {rc_services, [riak_core_service1, riak_core_service1]},
+    {rt_cookie, cookie},
 
     %% Paths to the locations of various versions of the project. This
     %% is only valid for the `rtdev' harness.
@@ -82,48 +87,20 @@
                   %% This is the root of the built `rtdev' repository,
                   %% used for manipulating the repo with git. All
                   %% versions should be inside this directory.
-                  {root, "/Users/dparfitt/rt/riak"},
+                  {root, "<your home here>/rt/riak_core_app"},
 
                   %% The path to the `current' version, which is used
                   %% exclusively except during upgrade tests.
-                  {current, "/Users/dparfitt/rt/riak/current"},
+                  {current, "<your home here>/rt/riak_core_app/riak_core_app-test"},
 
                   %% The path to the most immediately previous version
                   %% of the project, which is used when doing upgrade
                   %% tests.
-                  {previous, "/Users/dparfitt/rt/riak/riak-1.2.1"},
+                  {previous, "<your home here>/rt/riak_core_app/riak_core_app-dev"},
 
                   %% The path to the version before `previous', which
                   %% is used when doing upgrade tests.
-                  {legacy, "/Users/dparfitt/rt/riak/riak-1.1.4"}
-                 ]}
-]}.
-
-%% Sample project for Riak EDS ("EE").
-{rtee, [
-    %% [See rtdev.rt_project above]
-    {rt_project, "riak_ee"},
-
-    %% Specific to replication tests, the size of the "A" cluster, or
-    %% "source".
-    {cluster_a_size, 3},
-
-    %% The total number of nodes to deploy in replication tests.
-    {num_nodes, 6},
-
-    %% Which order to upgrade nodes in the cluster when doing the
-    %% `replication_upgrade' test. Valid values are:
-    %% * "forwards" - from 1 to 6
-    %% * "backwards" - from 6 to 1
-    %% * "alternate" - e.g. 1, 4, 2, 5, 3, 6
-    %% * "random" - shuffles the list
-    {repl_upgrade_order, "forwards"},
-
-    %% [See rtdev.rtdev_path above]
-    {rtdev_path, [{root, "/Users/dparfitt/rt/riak_ee"},
-                  {current, "/Users/dparfitt/rt/riak_ee/current"},
-                  {previous, "/Users/dparfitt/rt/riak_ee/riak_ee-1.2.1"},
-                  {legacy, "/Users/dparfitt/rt/riak_ee/riak_ee-1.1.4"}
+                  {legacy, "<your home here>/rt/riak_core_app/riak_core_app-stable"}
                  ]}
 ]}.
 
