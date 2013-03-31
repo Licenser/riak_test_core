@@ -33,7 +33,7 @@ confirm() ->
     %% Verify node-up behavior
     ping_up_test(Node),
     attach_up_test(Node),
-    status_up_test(Node),
+%%    status_up_test(Node),
     console_up_test(Node),
     start_up_test(Node),
     getpid_up_test(Node),
@@ -42,7 +42,7 @@ confirm() ->
     stop_test(Node),
     ping_down_test(Node),
     attach_down_test(Node),
-    status_down_test(Node),
+%%    status_down_test(Node),
     console_test(Node),
     start_test(Node),
     getpid_down_test(Node),
@@ -128,22 +128,22 @@ attach_down_test(Node) ->
     ?assert(rt:str(AttachOut, "Node is not running!")),
     ok.
 
-status_up_test(Node) ->
-    lager:info("Test riak-admin status on ~s", [Node]),
+%% status_up_test(Node) ->
+%%     lager:info("Test riak-admin status on ~s", [Node]),
 
-    {ok, StatusOut} = rt:admin(Node, ["status"]),
-    io:format("Result of status: ~s", [StatusOut]),
+%%     {ok, StatusOut} = rt:admin(Node, ["status"]),
+%%     io:format("Result of status: ~s", [StatusOut]),
 
-    ?assert(rt:str(StatusOut, "1-minute stats")),
-    ?assert(rt:str(StatusOut, "kernel_version")),
+%%     ?assert(rt:str(StatusOut, "1-minute stats")),
+%%     ?assert(rt:str(StatusOut, "kernel_version")),
 
-    ok.
+%%     ok.
 
-status_down_test(Node) ->
-    lager:info("Test riak-admin status while down"),
-    {ok, StatusOut} = rt:admin(Node, ["status"]),
-    ?assert(rt:str(StatusOut, "Node is not running!")),
-    ok.
+%% status_down_test(Node) ->
+%%     lager:info("Test riak-admin status while down"),
+%%     {ok, StatusOut} = rt:admin(Node, ["status"]),
+%%     ?assert(rt:str(StatusOut, "Node is not running!")),
+%%     ok.
 
 getpid_up_test(Node) ->
     lager:info("Test riak getpid on ~s", [Node]),
