@@ -366,7 +366,7 @@ leave(Node) ->
 try_leave(Node) ->
     case rpc:call(Node, riak_core, leave, []) of
         {badrpc, _} ->
-            rpc:call(Node, riak_kv_console, leave, [[]]),
+            rpc:call(Node, rt:config(rc_console, riak_kv_console), leave, [[]]),
             ok;
         Result ->
             Result
@@ -375,11 +375,11 @@ try_leave(Node) ->
 %% @doc Have `Node' remove `OtherNode' from the cluster
 remove(Node, OtherNode) ->
     ?assertEqual(ok,
-                 rpc:call(Node, riak_kv_console, remove, [[atom_to_list(OtherNode)]])).
+                 rpc:call(Node, rt:config(rc_console, riak_kv_console), remove, [[atom_to_list(OtherNode)]])).
 
 %% @doc Have `Node' mark `OtherNode' as down
 down(Node, OtherNode) ->
-    rpc:call(Node, riak_kv_console, down, [[atom_to_list(OtherNode)]]).
+    rpc:call(Node, rt:config(rc_console, riak_kv_console), down, [[atom_to_list(OtherNode)]]).
 
 %% @doc partition the `P1' from `P2' nodes
 %%      note: the nodes remained connected to riak_test@local,
@@ -551,12 +551,12 @@ wait_until_ready(Node) ->
     ?assertEqual(ok, wait_until(Node, fun is_ready/1)),
     ok.
 
-%% @doc Wait until status can be read from riak_kv_console
+%% @doc Wait until status can be read from rt:config(rc_console, riak_kv_console)
 wait_until_status_ready(Node) ->
     lager:info("Wait until status ready in ~p", [Node]),
     ?assertEqual(ok, wait_until(Node,
                                 fun(_) ->
-                                        case rpc:call(Node, riak_kv_console, status, [[]]) of
+                                        case rpc:call(Node, rt:config(rc_console, riak_kv_console), status, [[]]) of
                                             ok ->
                                                 true;
                                             _ ->
