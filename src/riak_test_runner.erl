@@ -34,7 +34,7 @@ metadata() ->
 metadata(Pid) ->
     riak_test ! {metadata, Pid},
     receive
-        {metadata, TestMeta} -> TestMeta 
+        {metadata, TestMeta} -> TestMeta
     end.
 
 -spec(confirm(integer(), atom(), [{atom(), term()}]) -> [tuple()]).
@@ -43,8 +43,9 @@ metadata(Pid) ->
 confirm(TestModule, Outdir, TestMetaData) ->
     start_lager_backend(TestModule, Outdir),
     rt:setup_harness(TestModule, []),
-    Backend = rt:set_backend(proplists:get_value(backend, TestMetaData)),
-    
+%% TODO: have to figure out how to handle this best
+%%    Backend = rt:set_backend(proplists:get_value(backend, TestMetaData)),
+
     {Status, Reason} = case check_prereqs(TestModule) of
         true ->
             lager:notice("Running Test ~s", [TestModule]),
@@ -54,12 +55,14 @@ confirm(TestModule, Outdir, TestMetaData) ->
         _ ->
             {fail, all_prereqs_not_present}
     end,
-    
+
     lager:notice("~s Test Run Complete", [TestModule]),
     {ok, Log} = stop_lager_backend(),
     Logs = iolist_to_binary(lists:foldr(fun(L, Acc) -> [L ++ "\n" | Acc] end, [], Log)),
 
-    RetList = [{test, TestModule}, {status, Status}, {log, Logs}, {backend, Backend} | proplists:delete(backend, TestMetaData)],
+    %% This has the backend removed for now
+    %% RetList = [{test, TestModule}, {status, Status}, {log, Logs}, {backend, Backend} | proplists:delete(backend, TestMetaData)],
+    RetList = [{test, TestModule}, {status, Status}, {log, Logs} | proplists:delete(backend, TestMetaData)],
     case Status of
         fail -> RetList ++ [{reason, iolist_to_binary(io_lib:format("~p", [Reason]))}];
         _ -> RetList
@@ -119,13 +122,13 @@ rec_loop(Pid, TestModule, TestMetaData) ->
 
 check_prereqs(Module) ->
     try Module:module_info(attributes) of
-        Attrs ->       
+        Attrs ->
             Prereqs = proplists:get_all_values(prereq, Attrs),
             P2 = [ {Prereq, rt:which(Prereq)} || Prereq <- Prereqs],
             lager:info("~s prereqs: ~p", [Module, P2]),
             [ lager:warning("~s prereq '~s' not installed.", [Module, P]) || {P, false} <- P2],
             lists:all(fun({_, Present}) -> Present end, P2)
-    catch 
+    catch
         _DontCare:_Really ->
             not_present
     end.
