@@ -1,5 +1,12 @@
+# Riak Test Core
+
+This is a fork of basho's Riak Test refactoring it from an application to a library and removes the direct dependency/targeting of riak_kv from the files to make it more universal usable.
+
+That said little to no of the original code changed see the original README below.
+
 # Riak Test
 Welcome to the exciting world of `riak_test`. 
+
 
 ## What is Riak Test?
 
