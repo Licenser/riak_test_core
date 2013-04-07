@@ -1,0 +1,18 @@
+{application, riak_test_core,
+ [
+  {description, ""},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  lager
+                 ]},
+  {env, [
+    {platform, undefined},
+    {rt_scratch_dir, "/tmp/riak_test_scratch"},
+    {rt_max_wait_time, 180000},
+    {rt_retry_delay, 500},
+    {rt_harness, rtdev}
+  ]}
+ ]}.
