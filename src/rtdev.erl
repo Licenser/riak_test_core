@@ -174,6 +174,8 @@ update_app_config_file(ConfigFile, Config) ->
     ?assertEqual(ok, file:write_file(ConfigFile, NewConfigOut)),
     ok.
 
+
+%%TODO: make this less riakish
 get_backends() ->
     Backends = lists:usort(
         lists:flatten([ get_backends(DevPath) || DevPath <- devpaths()])),
@@ -188,6 +190,8 @@ get_backends() ->
 get_backends(DevPath) ->
     [get_backend(AppConfig) || AppConfig <- all_the_app_configs(DevPath)].
 
+
+%%TODO: make this less riakish
 get_backend(AppConfig) ->
     {ok, [Config]} = file:consult(AppConfig),
     kvc:path(riak_kv.storage_backend, Config).
@@ -206,7 +210,7 @@ clean_data_dir(Nodes, SubDir) when is_list(Nodes) ->
     lists:foreach(fun rm_dir/1, DataDirs).
 
 rm_dir(Dir) ->
-    lager:info("Removing directory ~s", [Dir]), 
+    lager:info("Removing directory ~s", [Dir]),
     ?assertCmd("rm -rf " ++ Dir),
     ?assertEqual(false, filelib:is_dir(Dir)).
 
@@ -458,6 +462,8 @@ check_node({_N, Version}) ->
             erlang:error("You don't have Riak " ++ atom_to_list(Version) ++ " installed or configured")
     end.
 
+
+%%TODO: riakish
 set_backend(Backend) ->
     lager:info("rtdev:set_backend(~p)", [Backend]),
     update_app_config(all, [{riak_kv, [{storage_backend, Backend}]}]),
