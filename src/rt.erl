@@ -113,6 +113,7 @@
          wait_until_status_ready/1,
          wait_until_transfers_complete/1,
          wait_until_unpingable/1,
+         wait_until_unpingable/2,
          whats_up/0,
          which/1,
          brutal_kill/1
@@ -617,7 +618,11 @@ wait_until_pingable(Node) ->
     ok.
 
 %% @doc Wait until the specified node is no longer pingable
+
 wait_until_unpingable(Node) ->
+    wait_until_unpingable(Node, 360).
+
+wait_until_unpingable(Node, Time) ->
     lager:info("Wait until ~p is not pingable", [Node]),
     _OSPidToKill = rpc:call(Node, os, getpid, []),
     F = fun(N) ->
@@ -633,7 +638,7 @@ wait_until_unpingable(Node) ->
     %% riak has stopped. Riak stop should only take about 5 minutes before its timeouts kill
     %% the process. This wait should at least wait that long.
     Delay = rt:config(rt_retry_delay),
-    Retry = 360000 div Delay,
+    Retry = (Time * 1000) div Delay,
     ?assertEqual(ok, wait_until(Node, F, Retry, Delay, TimeoutFun)),
     ok.
 
