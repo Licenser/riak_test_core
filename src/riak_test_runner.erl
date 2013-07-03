@@ -58,7 +58,8 @@ confirm(TestModule, Outdir, TestMetaData) ->
 
     lager:notice("~s Test Run Complete", [TestModule]),
     {ok, Log} = stop_lager_backend(),
-    Logs = iolist_to_binary(lists:foldr(fun(L, Acc) -> [L ++ "\n" | Acc] end, [], Log)),
+    %Logs = iolist_to_binary(lists:foldr(fun(L, Acc) -> [L ++ "\n" | Acc] end, [], Log)),
+    Logs = iolist_to_binary([lager_default_formatter:format(L, []) || {log, L} <- Log]),
 
     %% This has the backend removed for now
     %% RetList = [{test, TestModule}, {status, Status}, {log, Logs}, {backend, Backend} | proplists:delete(backend, TestMetaData)],
