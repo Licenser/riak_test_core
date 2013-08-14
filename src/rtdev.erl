@@ -194,7 +194,7 @@ get_backends(DevPath) ->
 %%TODO: make this less riakish
 get_backend(AppConfig) ->
     {ok, [Config]} = file:consult(AppConfig),
-    kvc:path(riak_kv.storage_backend, Config).
+    kvc:path('riak_kv.storage_backend', Config).
 
 node_path(Node) ->
     N = node_id(Node),
