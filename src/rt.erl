@@ -225,7 +225,7 @@ rpc_get_env(Node, [{App,Var}|Others]) ->
 %%      nodes deployed.
 %% @todo Re-add -spec after adding multi-version support
 deploy_nodes(Versions) when is_list(Versions) ->
-    Services = rt:config(rc_services, [riak_kv]),
+    Services = rt:config(rc_services, []),
     deploy_nodes(Versions, Services);
 deploy_nodes(NumNodes) when is_integer(NumNodes) ->
     deploy_nodes([ current || _ <- lists:seq(1, NumNodes)]).
